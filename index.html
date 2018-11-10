@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+        <head>
+                <meta charset="UTF-8">
+                <title>Canvas</title>
+                <style type="text/css">
+                    canvas{
+                        border: 1px solid #000000;
+                    }
+                </style>
+            
+            
+            </head>
+            <body onload="init()">
+                <h1>Feel free to draw whatever you like below:</h1>
+                <ul>
+                    <li> "b" - change pen color to blue </li>
+                    <li> "g" - change pen color to green </li>
+                    <li> "r" - change pen color to red </li>
+                    <li> "y" - change pen color to yellow </li>
+                    <li> "up arrow" - make pen size larger </li>
+                    <li> "down arrow" - make pen size smaller </li>
+                    <li> "space bar" - clear the canvas </li>
+                </ul>        
+
+
+                <canvas id="can" width="800" height="500" style="border:1px solid;"></canvas>
+
+
+	<script type="text/javascript">
+	    var canvas, ctx, flag = false,
+	        prevX = 0,
+	        currX = 0,
+	        prevY = 0,
+	        currY = 0,
+	        size = 2,
+	        color = 'black',
+	        brush = 'dot',
+	        dot_flag = false;
+    
+	    function init() {
+	        canvas = document.getElementById('can');
+	        ctx = canvas.getContext("2d");    
+	        canvas.addEventListener("mousemove", function (e) {move(e)}, false);
+	        canvas.addEventListener("mousedown", function (e) {down(e)}, false);
+	        canvas.addEventListener("mouseup", function (e) {out(e)}, false);
+	        canvas.addEventListener("mouseout", function (e) {out(e)}, false);
+	        document.addEventListener("keydown",function(e) {key(e)},false);
+	    }
+	    function draw() {
+	    ctx.beginPath();
+	    if (brush === 'line'){
+		    ctx.moveTo(prevX, prevY);
+		    ctx.lineTo(currX, currY);
+		    ctx.strokeStyle = color;
+		    ctx.lineWidth = size;
+		    ctx.stroke();
+		}
+		else{
+		    ctx.arc(currX, currY, size, 0, 2 * Math.PI);
+			ctx.fillStyle = color;
+			ctx.fill();
+		}
+	    ctx.closePath();
+	}
+	    function move(e) {
+            if (flag) {
+                prevX = currX;
+                prevY = currY;
+                currX = e.clientX - canvas.offsetLeft;
+                currY = e.clientY - canvas.offsetTop;
+                draw();
+            }
+        }
+	    function down(e) {
+	        prevX = currX;
+	        prevY = currY;
+	        currX = e.clientX - canvas.offsetLeft;
+	        currY = e.clientY - canvas.offsetTop;
+	        flag = true;
+	        dot_flag = true;
+	        if (dot_flag) {
+	            ctx.beginPath();
+	            ctx.fillStyle = color;
+	            ctx.fillRect(currX, currY, 2, 2);
+	            ctx.closePath();
+	            dot_flag = false;
+        	}
+    	}
+	    function out(e) {
+	    	flag = false;
+    	}
+	    function key(e) {
+			switch(e.keyCode){
+				// space
+				case 32:
+					clear();
+					 break;
+				 // up arrow
+				case 38:
+					sizeUp();
+					break;
+			 	// down arrow
+				case 40:
+					sizeDown();
+					break;
+				// yellow
+				case 89:
+					changeColor("yellow");
+					break;
+				// g
+				case 71:
+					changeColor("green");
+					 break; 
+				// r
+				case 82:
+					changeColor("red");
+					 break;
+				// b
+				case 66:
+					changeColor("blue");
+					 break;
+				// l for line drawing
+				case 76:
+					toggleLine();
+					break;
+			}
+    	}
+	    
+		function sizeUp() {
+			size++;
+		} 
+		function sizeDown() {
+			size > 1 ? size-- : size = 1;
+		} 
+		function toggleLine(){
+			brush === 'line' ? brush = 'dot': brush = 'line';
+		}
+		
+		function changeColor(colorcode) {
+			color=colorcode;
+		} 
+		
+		function clear() {
+			ctx.clearRect(0, 0, 800, 500);
+		}
+	</script>
+
+	</body>
+</html>
