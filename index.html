@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Canvas</title>
+	<style type="text/css">
+		canvas{
+			border: 1px solid #000000;
+		}
+	</style>
+
+
+</head>
+<body>
+    <h1>Feel free to draw whatever you like below:</h1>
+    <ul>
+        <li> "b" - change pen color to blue </li>
+        <li> "g" - change pen color to green </li>
+        <li> "r" - change pen color to red </li>
+        <li> "y" - change pen color to yellow </li>
+        <li> "up arrow" - make pen size larger </li>
+        <li> "down arrow" - make pen size smaller </li>
+        <li> "space bar" - clear the canvas </li>
+    </ul>        
+
+	<canvas id="mycanvas" width="800" height="500">
+Here is a canvas for you to draw.
+</canvas>
+
+<script type="text/javascript">
+
+var size = prompt("Enter your brush size:");
+
+
+var md=false; 
+var canvas = document.getElementById("mycanvas");
+canvas.addEventListener("mousedown",down);
+canvas.addEventListener("mouseup",toggledraw);
+canvas.addEventListener("mousemove",
+
+function(evt){
+    var mousePos = getMousePos(canvas, evt);
+    var posx= mousePos.x;
+    var posy= mousePos.y;
+    draw(canvas, posx, posy);
+} );
+
+function down() {
+    md=true;
+}
+
+function toggledraw() {
+    md=false; 
+    canvas.style.cursor="default";
+}
+
+function getMousePos(canvas, evt){
+    var rect = canvas.getBoundingClientRect();
+    return{
+        x:evt.clientX - rect.left,
+        y:evt.clientY - rect.top
+    }
+}
+
+function draw(canvas, posx, posy){
+var context = canvas.getContext("2d");
+if(md){
+    canvas.style.cursor="pointer";
+    context.fillRect(posx,posy,size,size);
+}
+
+}
+
+
+
+
+
+    </script>
+
+<button onclick="window.location.reload()"> Reset </button>
+
+</body>
